@@ -1,0 +1,27 @@
+{% extends 'template.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<div>
+    <h1>User Sign In</h1>
+</div>
+
+<div>
+    <form method="POST">
+        <label>
+            Username
+            <input type="text" name="username">
+        </label>
+
+        <label>
+            Password
+            <input type="password" name="password">
+        </label>
+
+        <div>
+            <button type="submit">Sign In</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

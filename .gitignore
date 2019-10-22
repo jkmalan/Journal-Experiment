@@ -1,0 +1,9 @@
+# Do not push working environment files to Git
+
+# PyCharm Settings
+.idea/
+*.iml
+
+# Root
+app.db
+Pipfile.lock
