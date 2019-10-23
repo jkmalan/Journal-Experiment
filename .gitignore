@@ -7,3 +7,7 @@
 # Root
 app.db
 Pipfile.lock
+
+# Python Files
+__pycache__/
+*.pyc

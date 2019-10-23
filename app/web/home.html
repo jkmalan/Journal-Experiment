@@ -1,0 +1,18 @@
+{% extends 'template.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div>
+    <h1></h1>
+</div>
+
+<div>
+    <a href="{{url_for('route.signin')}}">
+        <button type="button">Sign In</button>
+    </a>
+    <a href="{{url_for('route.signup')}}">
+        <button type="button">Sign Up</button>
+    </a>
+</div>
+
+{% endblock %}

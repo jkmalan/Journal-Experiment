@@ -1,5 +1,5 @@
 {% extends 'template.html' %}
-{% block title %}Login{% endblock %}
+{% block title %}User Sign In{% endblock %}
 {% block content %}
 
 <div>
@@ -7,7 +7,7 @@
 </div>
 
 <div>
-    <form method="POST">
+    <form action="/auth/signin" method="POST">
         <label>
             Username
             <input type="text" name="username">

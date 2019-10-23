@@ -1,5 +1,3 @@
-from sys import argv
-
 from app import app
 
 
