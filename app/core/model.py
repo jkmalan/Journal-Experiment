@@ -13,7 +13,7 @@ class Base(model.Model):
 class User(Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True)
-    username = Column(String, nullable=False)
+    username = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
     fullname = Column(String, nullable=False)
     email = Column(String, nullable=False)
