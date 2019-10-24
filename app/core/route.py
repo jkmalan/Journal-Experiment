@@ -1,5 +1,8 @@
+import os
+
 from flask import Blueprint, request, render_template, url_for, redirect, session
 
+from app.api.watson import analyze
 from app.core.model import model, User, Journal, Entry
 
 route = Blueprint('route', __name__, template_folder='../web')
@@ -9,6 +12,13 @@ route = Blueprint('route', __name__, template_folder='../web')
 def home():
     data = str(session.items())
     print(data)
+
+    # A simple test of the Watson language processor, and yes... this JB song will always be fire
+    if os.getenv('WATSON_SECRET') is not None:
+        result = analyze("As long as you love me, we could be starving, we could be homeless, we could be broke")
+        print(result['max_key'])
+        print(result['max_val'])
+
     return render_template('home.html')
 
 
