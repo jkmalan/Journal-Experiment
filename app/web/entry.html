@@ -3,15 +3,22 @@
 {% block content %}
 
 <div>
-    <h1>Journal Entry</h1>
+    <h1>Entry: {{ entry.title }}</h1>
 </div>
 
 <div>
-    <p>Hi I am a journal entry!</p>
+    <p>Title:</p>
+    <p>{{ entry.title }}</p>
 
-    <div>
-        <p></p>
-    </div>
+    <p>Body:</p>
+    <p>{{ entry.body }}</p>
+
+    {% if emotions %}
+        <p>Emotions detected in this entry:</p>
+        {% for emotion in emotions %}
+            <p>>> Emotion: {{ emotion.name }}; Value: {{ emotion.value }}</p>
+        {%  endfor %}
+    {% endif %}
 </div>
 
 {% endblock %}

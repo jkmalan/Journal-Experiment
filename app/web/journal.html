@@ -3,11 +3,27 @@
 {% block content %}
 
 <div>
-    <h1>User Journal</h1>
+    <h1>Journal: {{ journal.title }}</h1>
 </div>
 
 <div>
-    <p>Hi I am a user journal!</p>
+    {% for entry in entries %}
+        <p>{{ entry.title }} <a href="{{ url_for('route.entry_view', entry_id=entry.id) }}">View Entry</a></p>
+    {% endfor %}
+
+    <form method="POST">
+        <h4>Add an entry</h4>
+        <label>
+            Entry Title:
+            <input type="text" name="entry_title">
+        </label>
+        <label>
+            Entry Body:
+            <input type="text" name="entry_body">
+        </label>
+
+        <button type="submit">Add Entry</button>
+    </form>
 </div>
 
 {% endblock %}

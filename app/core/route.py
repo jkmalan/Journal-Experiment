@@ -4,6 +4,7 @@ from flask import Blueprint, request, flash, render_template, url_for, redirect,
 from functools import wraps
 
 from app.api.watson import analyze
+from app.core.config import config
 from app.core.model import model, User, Journal, Entry
 
 route = Blueprint('route', __name__, template_folder='../web')
@@ -14,11 +15,11 @@ def auth_signin():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    guest = User.query.filter_by(username=username).first()
-    if guest is not None:
-        if guest.password == password:
-            session['user_id'] = guest.id
-            return redirect(url_for('route.user'))
+    user = User.query.filter_by(username=username).first()
+    if user is not None:
+        if user.password == password:
+            session['user_id'] = user.id
+            return redirect(url_for('route.user_view'))
 
     return redirect(url_for('route.home'))
 
@@ -30,13 +31,13 @@ def auth_signup():
     fullname = request.form.get('fullname')
     email = request.form.get('email')
 
-    guest = User(username=username, password=password, fullname=fullname, email=email)
-    model.session.add(guest)
+    user = User(username=username, password=password, fullname=fullname, email=email)
+    model.session.add(user)
     model.session.commit()
 
-    guest = User.query.filter_by(username=username).first()
-    session['user_id'] = guest.id
-    return redirect(url_for('route.user'))
+    user = User.query.filter_by(username=username).first()
+    session['user_id'] = user.id
+    return redirect(url_for('route.user_view'))
 
 
 def auth_required(function):
@@ -44,8 +45,8 @@ def auth_required(function):
     def wrapper(*args, **kwargs):
         user_id = session.get('user_id')
         if user_id:
-            guest = User.query.filter_by(id=user_id)
-            if guest:
+            user = User.query.filter_by(id=user_id)
+            if user:
                 return function(*args, **kwargs)
 
         return redirect(url_for('route.signin'))
@@ -54,8 +55,8 @@ def auth_required(function):
 
 @route.route('/', methods=['GET'])
 def home():
-    if session['user_id'] is not None:
-        return redirect(url_for('route.user'))
+    if session.get('user_id'):
+        return redirect(url_for('route.user_view'))
     return render_template('home.html')
 
 
@@ -75,19 +76,42 @@ def signout():
     return render_template('signout.html')
 
 
-@route.route('/user', methods=['GET'])
+@route.route('/user', methods=['GET', 'POST'])
 @auth_required
-def user():
-    return render_template('user.html')
+def user_view():
+    user = User.query.filter_by(id=session.get('user_id')).first()
+
+    if request.method == 'POST':
+        title = request.form.get('journal_title')
+        user.create_journal(title=title)
+
+    journal = user.get_journal()
+    return render_template('user.html', user=user, journal=journal)
 
 
-@route.route('/journal', methods=['GET'])
+@route.route('/user/journal', methods=['GET', 'POST'])
 @auth_required
-def journal():
-    return render_template('journal.html')
+def journal_view():
+    journal = Journal.query.filter_by(user_id=session.get('user_id')).first()
+
+    if request.method == 'POST':
+        title = request.form.get('entry_title')
+        body = request.form.get('entry_body')
+        journal.add_entry(title=title, body=body)
+
+    entries = journal.get_entries()
+    return render_template('journal.html', journal=journal, entries=entries)
 
 
-@route.route('/journal/entry', methods=['GET'])
+@route.route('/user/journal/entry/<int:entry_id>', methods=['GET', 'POST'])
 @auth_required
-def entry():
-    return render_template('entry.html')
+def entry_view(entry_id):
+    entry = Entry.query.filter_by(id=entry_id).first()
+    emotions = entry.get_emotions()
+    if not emotions:
+        emotion = analyze(entry.body)
+        for key, value in emotion.items():
+            entry.add_emotion(name=key, value=value)
+
+    emotions = entry.get_emotions()
+    return render_template('entry.html', entry=entry, emotions=emotions)

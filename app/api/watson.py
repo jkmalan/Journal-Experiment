@@ -34,14 +34,7 @@ def analyze(text):
 
     emotions = json_load['emotion']['document']['emotion']
 
-    max_key = 'none'
-    max_val = 0
-    for key, val in emotions.items():
-        if val > max_val:
-            max_key = key
-            max_val = val
-
-    return {'max_key': max_key, 'max_val': max_val}
+    return emotions
 
 
 # Uncomment the below lines to test the analyzer output
