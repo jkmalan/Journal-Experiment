@@ -43,6 +43,7 @@ class Entry(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String)
     body = Column(String)
+    emotion = Column(String)
 
     journal_id = Column(Integer, ForeignKey('journal.id'), nullable=False)
     journal = model.relationship("Journal", backref="journal", foreign_keys=[journal_id])
