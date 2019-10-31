@@ -8,7 +8,7 @@
 
 <div>
     {% for entry in entries %}
-        <p>{{ entry.title }} <a href="{{ url_for('route.entry_view', entry_id=entry.id) }}">View Entry</a></p>
+        <p>{{ entry.title }} <a href="{{ url_for('bp.entry_view', entry_id=entry.id) }}">View Entry</a></p>
     {% endfor %}
 
     <form method="POST">

@@ -1,25 +1,24 @@
 from flask import Flask
 
-from app.core.config import config
-from app.core.model import model
-from app.core.route import route
+from app.core.config import Config
 
 
-def initialize():
-    me = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
 
     # Initialize configuration options
-    me.config.from_object(config)
+    app.config.from_object(Config)
 
-    # Initialize data models
-    model.init_app(me)
-    with me.app_context():
-        model.create_all()
+    # Initialize global containers
+    from app.core import db, bc, lm
+    db.init_app(app)
+    bc.init_app(app)
+    lm.init_app(app)
+    lm.login_view = 'bp.signin'
 
+    print("Load blueprints")
     # Initialize app routes
-    me.register_blueprint(route)
+    from app.core import bp
+    app.register_blueprint(bp)
 
-    return me
-
-
-app = initialize()
+    return app

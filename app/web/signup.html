@@ -7,29 +7,35 @@
 </div>
 
 <div>
-    <form action="/auth/signup" method="POST">
-        <label>
+    <form method="POST">
+        {{  form.hidden_tag() }}
+        <label class="form-group">
             Username
-            <input type="text" name="username">
+            {{ form.username(class_='form-control') }}
         </label>
 
-        <label>
-            Password
-            <input type="password" name="password">
-        </label>
-
-        <label>
+        <label class="form-group">
             Full Name
-            <input type="text" name="fullname">
+            {{ form.fullname(class_='form-control') }}
         </label>
 
-        <label>
+        <label class="form-group">
             Email
-            <input type="text" name="email">
+            {{ form.email(class_='form-control') }}
+        </label>
+
+        <label class="form-group">
+            Password
+            {{ form.password(class_='form-control') }}
+        </label>
+
+        <label class="form-group">
+            Password
+            {{ form.password_verify(class_='form-control') }}
         </label>
 
         <div>
-            <button type="submit">Sign Up</button>
+            {{ form.submit(class_='btn btn-primary') }}
         </div>
     </form>
 </div>

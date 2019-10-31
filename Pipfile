@@ -8,6 +8,9 @@ verify_ssl = true
 [packages]
 flask = "*"
 flask-sqlalchemy = "*"
+flask-login = "*"
+flask-bcrypt = "*"
+flask-wtf = "*"
 ibm-watson = "*"
 ibm-cloud-sdk-core = "*"
 

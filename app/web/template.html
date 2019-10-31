@@ -18,7 +18,7 @@
 
 <nav class="navbar navbar-expand-md fixed-top bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="{{ url_for('route.home') }}"><img src="" alt="" /></a>
+        <a class="navbar-brand" href="{{ url_for('bp.home') }}"><img src="" alt="" /></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggle-icon"></span>
         </button>
@@ -26,19 +26,19 @@
         <div class="navbar-collapse collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('route.home') }}">Home</a>
+                    <a class="nav-link" href="{{ url_for('bp.home') }}">Home</a>
                 </li>
-                {%  if session['user_id'] == None %}
+                {%  if not current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('route.signin') }}">Sign In</a>
+                    <a class="nav-link" href="{{ url_for('bp.signin') }}">Sign In</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('route.signup') }}">Sign Up</a>
+                    <a class="nav-link" href="{{ url_for('bp.signup') }}">Sign Up</a>
                 </li>
                 {%  endif %}
-                {%  if session['user_id'] != None %}
+                {%  if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('route.signout') }}">Sign Out</a>
+                    <a class="nav-link" href="{{ url_for('bp.signout') }}">Sign Out</a>
                 </li>
                 {%  endif %}
             </ul>
