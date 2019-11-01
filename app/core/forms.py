@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Email, Length, EqualTo
+from wtforms.validators import InputRequired, Email, Length, EqualTo, Optional
 
 
 class SigninForm(FlaskForm):
     username = StringField('Username', validators=[
-        DataRequired()
+        InputRequired()
     ])
     password = PasswordField('Password', validators=[
-        DataRequired()
+        InputRequired()
     ])
     remember = BooleanField('Remember')
     submit = SubmitField('Submit')
@@ -16,22 +16,29 @@ class SigninForm(FlaskForm):
 
 class SignupForm(FlaskForm):
     username = StringField('Username', validators=[
-        DataRequired()
+        InputRequired()
     ])
     email = StringField('Email', validators=[
-        DataRequired(),
+        InputRequired(),
         Email()
     ])
     password = PasswordField('Password', validators=[
-        DataRequired(),
+        InputRequired(),
         Length(min=8, message='The password must be at least 8 characters')
     ])
-    password_verify = PasswordField('Password Verify', validators=[
-        DataRequired(),
-        EqualTo('password')
+    password_verify = PasswordField('Retype Password', validators=[
+        InputRequired(),
+        EqualTo('password', message='The passwords must be the same')
     ])
     fullname = StringField('Fullname', validators=[
-        DataRequired()
+        InputRequired()
     ])
     submit = SubmitField('Submit')
 
+
+class JournalForm(FlaskForm):
+    title = StringField('Journal Title', validators=[
+        InputRequired()
+    ])
+    description = StringField('Journal Description')
+    submit = SubmitField('Create')

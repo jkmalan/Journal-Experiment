@@ -35,12 +35,12 @@ class User(Base):
     def match_password(self, password):
         return bc.check_password_hash(self.password, password=password)
 
-    def get_journal(self):
-        journal = Journal.query.filter_by(user_id=self.id).first()
+    def get_journals(self):
+        journal = Journal.query.filter_by(user_id=self.id).all()
         return journal
 
-    def create_journal(self, title):
-        journal = Journal(title=title, user_id=self.id)
+    def add_journal(self, title, description):
+        journal = Journal(title=title, description=description, user_id=self.id)
         db.session.add(journal)
         db.session.commit()
 
@@ -64,8 +64,9 @@ class Journal(Base):
     __tablename__ = "journal"
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
+    description = Column(String, nullable=True)
 
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False, unique=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     user = db.relationship("User", backref="user", foreign_keys=[user_id])
 
     def get_entries(self):

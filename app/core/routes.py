@@ -3,7 +3,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from app.api.watson import analyze
 from app.core import bp
-from app.core.forms import SigninForm, SignupForm
+from app.core.forms import SigninForm, SignupForm, JournalForm
 from app.core.models import User, Journal, Entry
 
 
@@ -67,19 +67,21 @@ def signout():
 def user_view():
     user = current_user
 
-    if request.method == 'POST':
-        title = request.form.get('journal_title')
-        user.create_journal(title=title)
+    form = JournalForm()
+    if form.validate_on_submit():
+        user.add_journal(
+            title=form.title.data,
+            description=form.description.data
+        )
 
-    journal = user.get_journal()
-    return render_template('user.html', user=user, journal=journal)
+    journals = user.get_journals()
+    return render_template('user.html', form=form, user=user, journals=journals)
 
 
-@bp.route('/user/journal', methods=['GET', 'POST'])
+@bp.route('/user/journal/<int:journal_id>', methods=['GET', 'POST'])
 @login_required
-def journal_view():
-    user = current_user
-    journal = Journal.query.filter_by(user_id=user.id).first()
+def journal_view(journal_id):
+    journal = Journal.query.filter_by(id=journal_id).first()
 
     if request.method == 'POST':
         title = request.form.get('entry_title')
@@ -90,7 +92,7 @@ def journal_view():
     return render_template('journal.html', journal=journal, entries=entries)
 
 
-@bp.route('/user/journal/entry/<int:entry_id>', methods=['GET', 'POST'])
+@bp.route('/user/entry/<int:entry_id>', methods=['GET', 'POST'])
 @login_required
 def entry_view(entry_id):
     entry = Entry.query.filter_by(id=entry_id).first()

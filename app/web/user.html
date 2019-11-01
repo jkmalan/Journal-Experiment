@@ -7,23 +7,29 @@
 </div>
 
 <div>
-    <p>Welcome {{ user.fullname }}! This is your dashboard!</p>
+    <p>Welcome {{ user.fullname }}!</p>
 
-    {% if journal %}
-        <h4>{{ journal.title }}</h4>
-        <a href="{{ url_for('bp.journal_view') }}">Visit Journal</a>
-    {% else %}
-        <h4>Create your journal</h4>
+    {% for journal in journals %}
+        <p>{{ journal.title }} <a href="{{ url_for('bp.journal_view', journal_id=journal.id) }}">View Journal</a></p>
+    {% endfor %}
 
-        <form method="POST">
-            <label>
-                Journal Title:
-                <input type="text" name="journal_title">
-            </label>
+    <h4>Add a journal</h4>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label class="form-group">
+            Journal Title
+            {{ form.title(class_='form-control') }}
+        </label>
 
-            <button type="submit">Create</button>
-        </form>
-    {% endif %}
+        <label class="form-group">
+            Journal Description
+            {{ form.description(class_='form-control') }}
+        </label>
+
+        <div>
+            {{ form.submit(class_='btn btn-primary') }}
+        </div>
+    </form>
 
 </div>
 
